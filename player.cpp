@@ -1,5 +1,4 @@
 #include "player.h"
-#include <iostream>
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -9,6 +8,15 @@
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
     testingMinimax = false;
+
+    Side mySide = side;
+    Side other = (side == BLACK) ? WHITE : BLACK;
+
+    // create board
+    Board * b = &Board();
+
+
+
 
     /* 
      * TODO: Do any initialization you need to do here (setting up the board,
@@ -39,9 +47,39 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
-     */ 
+     */
 
-     std::cerr << "ehllo\n";
+     // process opponents moves
+     b.doMove(opponentsMove, other);
 
-    return NULL;
+     // find all possible moves
+     std::vector<Move*> moves = getOptions();
+
+     // select move that leads to hightest score
+     Move * best = getBestMove(moves);
+
+     b.doMove(best, mySide);
+
+    return *best;
 }
+
+
+std::vector<Move*> getOptions()
+{
+	return b.getAllMoves(mySide);
+}
+
+
+Move* getBestMove(std::vector<Move*> moves)
+{
+	for(int i = 0; i < (int)moves.size(); i++){
+		Board b = 
+	}
+
+}
+
+double heursitic(Board * b)
+{
+
+}
+

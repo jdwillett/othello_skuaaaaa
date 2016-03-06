@@ -178,3 +178,7 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+std::vector<Move*> getAllMoves(Side side){
+    return NULL;
+}
