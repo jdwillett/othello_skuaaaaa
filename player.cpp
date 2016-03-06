@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 /*
  * Constructor for the player; initialize everything here. The side your AI is
@@ -39,5 +40,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
      */ 
+
+     std::cerr << "ehllo\n";
+
     return NULL;
 }
