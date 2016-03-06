@@ -80,7 +80,7 @@ Move* getBestMove(std::vector<Move*> moves)
 		newb.doMove(moves[i], mySide);
 		double h = heursitic(newb);
 		if(h < minh){
-			h = minh;
+			minh = h;
 			minIndex = i;
 		}
 	}
@@ -91,6 +91,10 @@ Move* getBestMove(std::vector<Move*> moves)
 
 double heursitic(Board * b)
 {
-
+	if(mySide == WHITE){
+		return b->countWhite() - b->countBlack();
+	}else{
+		return b->countBlack() - b->countWhite();
+	}
 }
 
