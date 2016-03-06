@@ -72,9 +72,20 @@ std::vector<Move*> getOptions()
 
 Move* getBestMove(std::vector<Move*> moves)
 {
+	double minh = 1e20;
+	int minIndex = 0;
+
 	for(int i = 0; i < (int)moves.size(); i++){
-		Board b = 
+		Board * newb = b.copy();
+		newb.doMove(moves[i], mySide);
+		double h = heursitic(newb);
+		if(h < minh){
+			h = minh;
+			minIndex = i;
+		}
 	}
+
+	return moves[minIndex];
 
 }
 
