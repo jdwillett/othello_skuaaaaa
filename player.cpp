@@ -13,8 +13,8 @@ Player::Player(Side side) {
     Side other = (side == BLACK) ? WHITE : BLACK;
 
     // create board
-    Board * b = &Board();
-
+    Board  d = Board();
+    Board * b = &d;
 
 
 
@@ -50,7 +50,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      */
 
      // process opponents moves
-     b.doMove(opponentsMove, other);
+     b->doMove(opponentsMove, other);
 
      // find all possible moves
      std::vector<Move*> moves = getOptions();
@@ -58,27 +58,27 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      // select move that leads to hightest score
      Move * best = getBestMove(moves);
 
-     b.doMove(best, mySide);
+     b->doMove(best, mySide);
 
-    return *best;
+    return (best);
 }
 
 
-std::vector<Move*> getOptions()
+std::vector<Move*> Player::getOptions()
 {
-	return b.getAllMoves(mySide);
+	return b->getAllMoves(mySide);
 }
 
 
-Move* getBestMove(std::vector<Move*> moves)
+Move* Player::getBestMove(std::vector<Move*> moves)
 {
 	double minh = 1e20;
 	int minIndex = 0;
 
 	for(int i = 0; i < (int)moves.size(); i++){
-		Board * newb = b.copy();
-		newb.doMove(moves[i], mySide);
-		double h = heursitic(newb);
+		Board * newb = b->copy();
+		newb->doMove(moves[i], mySide);
+		double h = heuristic(newb);
 		if(h < minh){
 			minh = h;
 			minIndex = i;
@@ -89,12 +89,14 @@ Move* getBestMove(std::vector<Move*> moves)
 
 }
 
-double heursitic(Board * b)
+double Player::heuristic(Board * b)
 {
 	if(mySide == WHITE){
-		return b->countWhite() - b->countBlack();
+		return (double)(b->countWhite() - b->countBlack());
 	}else{
-		return b->countBlack() - b->countWhite();
+		return (double)(b->countBlack() - b->countWhite());
 	}
+
+	return 0.0;
 }
 

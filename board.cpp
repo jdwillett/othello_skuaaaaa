@@ -179,7 +179,7 @@ void Board::setBoard(char data[]) {
     }
 }
 
-std::vector<Move*> getAllMoves(Side side){
+std::vector<Move*> Board::getAllMoves(Side side){
     std::vector<Move*> moves;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -189,4 +189,5 @@ std::vector<Move*> getAllMoves(Side side){
             }
         }
     }
+    return moves;
 }
