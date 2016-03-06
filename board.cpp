@@ -180,5 +180,13 @@ void Board::setBoard(char data[]) {
 }
 
 std::vector<Move*> getAllMoves(Side side){
-    return NULL;
+    std::vector<Move*> moves;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Move move(i, j);
+            if (checkMove(&move, side)){
+                moves.push_back(&move);
+            }
+        }
+    }
 }
