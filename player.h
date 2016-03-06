@@ -11,6 +11,11 @@ class Player {
 public:
     Player(Side side);
     ~Player();
+
+    Side  mySide;
+    Side other;
+
+    Board b;
     
     Move *doMove(Move *opponentsMove, int msLeft);
     double heuristic(Board*board);
