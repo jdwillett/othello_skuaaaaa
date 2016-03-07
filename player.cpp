@@ -7,28 +7,23 @@
  */
 Player::Player(Side side) {
     // Will be set to true in test_minimax.cpp.
+	std::cerr << "started c\n";
     testingMinimax = false;
 
     Side mySide = side;
     Side other = (side == BLACK) ? WHITE : BLACK;
 
     // create board
-    Board  d = Board();
-    Board * b = &d;
+    Board * b = new Board();
 
-
-
-    /* 
-     * TODO: Do any initialization you need to do here (setting up the board,
-     * precalculating things, etc.) However, remember that you will only have
-     * 30 seconds.
-     */
+    std::cerr << "finished constructing\n";
 }
 
 /*
  * Destructor for the player.
  */
 Player::~Player() {
+	delete b;
 }
 
 /*
@@ -53,12 +48,16 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      b->doMove(opponentsMove, other);
 
      // find all possible moves
+     std::cerr << "started domove\n";
      std::vector<Move*> moves = getOptions();
+     std::cerr <<"h\n";
 
      // select move that leads to hightest score
      Move * best = getBestMove(moves);
 
      b->doMove(best, mySide);
+
+     std::cerr << "ended domove\n";
 
     return (best);
 }
@@ -72,20 +71,20 @@ std::vector<Move*> Player::getOptions()
 
 Move* Player::getBestMove(std::vector<Move*> moves)
 {
-	double minh = 1e20;
-	int minIndex = 0;
+	double maxh = -1e20;
+	int maxIndex = 0;
 
 	for(int i = 0; i < (int)moves.size(); i++){
 		Board * newb = b->copy();
 		newb->doMove(moves[i], mySide);
 		double h = heuristic(newb);
-		if(h < minh){
-			minh = h;
-			minIndex = i;
+		if(h > maxh){
+			maxh = h;
+			maxIndex = i;
 		}
 	}
 
-	return moves[minIndex];
+	return moves[maxIndex];
 
 }
 

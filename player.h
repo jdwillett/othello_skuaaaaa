@@ -11,10 +11,8 @@ class Player {
 private:
     Side  mySide;
     Side other;
-    Board* b;
+    Board * b;
     
-     
-
 public:
     Player(Side side);
     ~Player();
