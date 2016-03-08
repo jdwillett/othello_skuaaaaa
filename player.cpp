@@ -1,5 +1,7 @@
 #include "player.h"
 
+Board * b;
+
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish 
@@ -10,11 +12,11 @@ Player::Player(Side side) {
 	std::cerr << "started c\n";
     testingMinimax = false;
 
-    Side mySide = side;
-    Side other = (side == BLACK) ? WHITE : BLACK;
+    mySide = side;
+    other = (side == BLACK) ? WHITE : BLACK;
 
     // create board
-    Board * b = new Board();
+    b = new Board();
 
     std::cerr << "finished constructing\n";
 }
@@ -50,7 +52,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      // find all possible moves
      std::cerr << "started domove\n";
      std::vector<Move*> moves = getOptions();
-     std::cerr <<"h\n";
+     std::cerr <<"got all the moves\n";
 
      // select move that leads to hightest score
      Move * best = getBestMove(moves);
