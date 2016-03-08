@@ -22,7 +22,7 @@ Player::Player(Side side) {
  * Destructor for the player.
  */
 Player::~Player() {
-	delete b;
+    delete b;
 }
 
 /*
@@ -63,37 +63,30 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
 std::vector<Move> Player::getOptions()
 {
-	return  b->getAllMoves(mySide);;
+    return  b->getAllMoves(mySide);;
 }
 
 
 Move Player::getBestMove(std::vector<Move> moves)
 {
-	double maxh = -1e20;
-	int maxIndex = 0;
+    double maxh = -1e20;
+    int maxIndex = 0;
 
-	for(int i = 0; i < (int)moves.size(); i++){
-		Board * newb = b->copy();
-		newb->doMove(&moves[i], mySide);
-		double h = heuristic(newb);
-		if(h > maxh){
-			maxh = h;
-			maxIndex = i;
-		}
-	}
+    for(int i = 0; i < (int)moves.size(); i++){
+        Board * newb = b->copy();
+        newb->doMove(&moves[i], mySide);
+        double h = heuristic(newb);
+        if(h > maxh){
+            maxh = h;
+            maxIndex = i;
+        }
+    }
 
-	return moves[maxIndex];
+    return moves[maxIndex];
 
 }
 
 double Player::heuristic(Board * b)
 {
-	if(mySide == WHITE){
-		return (double)(b->countWhite() - b->countBlack());
-	}else{
-		return (double)(b->countBlack() - b->countWhite());
-	}
-
-	return 0.0;
+    return b->dynamic_heuristic_evaluation_function(mySide);
 }
-
