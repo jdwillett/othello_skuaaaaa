@@ -50,7 +50,8 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      if(moves.empty()) return NULL;
 
      // select move that leads to hightest score
-     Move best = getBestMoveImproved(moves);
+     //Move best = getBestMoveImproved(moves);
+     Move best = getBestMoveNPly(moves, 3);
      Move * bestp = new Move(best.getX(), best.getY());
 
      b->doMove(bestp, mySide);
@@ -58,13 +59,13 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      return bestp;
 }
 
-
+// returns all possible moves given a board and a side to move
 std::vector<Move> Player::getOptions(Side side, Board * brd)
 {
     return brd->getAllMoves(side);
 }
 
-
+// very quick analysis of moves to find best one
 Move Player::getBestMove(std::vector<Move> moves)
 {
     double maxh = -1e20;
@@ -83,6 +84,7 @@ Move Player::getBestMove(std::vector<Move> moves)
     return moves[maxIndex];
 }
 
+// preforms 2=ply minimax to find the optimal move
 Move Player::getBestMoveImproved(std::vector<Move> moves)
 {
     std::vector<Board*> myboards;
@@ -114,6 +116,68 @@ Move Player::getBestMoveImproved(std::vector<Move> moves)
     return moves[index];
 }
 
+Move Player::getBestMoveNPly(std::vector<Move> moves, int maxlevel)
+{
+	std::vector<Board*> boards;
+
+	for(int i = 0; i < (int)moves.size(); i++){
+		Board * newb = b->copy();
+		newb->doMove(&moves[i], mySide);
+		getScore(newb, maxlevel, 1, false);
+		boards.push_back(newb);
+	}
+
+	return moves[getMaxIndex(boards)];
+}
+
+void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
+{
+	if(level == maxlevel){
+		brd->score = heuristic(brd);
+		return;
+	}
+
+	if(ourpick){
+		// we pick the next move
+		std::vector<Move> movs = getOptions(mySide, brd);
+		std::vector<Board*> nextBoards;
+
+		for(int i = 0; i < (int)movs.size(); i++){
+			Board * newb = brd->copy();
+			newb->doMove(&movs[i], mySide);
+			getScore(newb, maxlevel, level + 1, !ourpick);
+			nextBoards.push_back(newb);
+		}
+
+		if(movs.size() == 0)
+			brd->score = heuristic(brd);
+		else
+			brd->score = nextBoards[getMaxIndex(nextBoards)]->score;
+
+	}else{
+		std::vector<Move> movs = getOptions(other, brd);
+		std::vector<Board*> nextBoards;
+
+		std::cerr << "size of moves is " << movs.size() << std::endl;
+
+		for(int i = 0; i < (int)movs.size(); i++){
+			Board * newb = brd->copy();
+			newb->doMove(&movs[i], other);
+			getScore(newb, maxlevel, level + 1, !ourpick);
+			nextBoards.push_back(newb);
+		}
+
+		std::cerr << "gets here\n";
+
+		if(movs.size() == 0)
+			brd->score = heuristic(brd);
+		else
+			brd->score = nextBoards[getMinIndex(nextBoards)]->score;
+	}
+
+}
+
+// returns the min index of a set of boards
 double Player::getMinIndex(std::vector<Board*> boards)
 {
 	double min = 1.e20;
@@ -130,7 +194,7 @@ double Player::getMinIndex(std::vector<Board*> boards)
     return minIndex;
 }
 
-
+// returns the max index of a set of boards
 double Player::getMaxIndex(std::vector<Board*> boards)
 {
 	double max = -1.e20;
@@ -147,6 +211,7 @@ double Player::getMaxIndex(std::vector<Board*> boards)
     return maxIndex;
 }
 
+// simple board scoring function 
 double Player::simpleheurisitic(Board * b)
 {
 	if(mySide == WHITE){
@@ -156,7 +221,7 @@ double Player::simpleheurisitic(Board * b)
 	}
 }
 
-
+// returns a score relating to how optimal a board is
 double Player::heuristic(Board * b)
 {
     return b->dynamic_heuristic_evaluation_function(mySide);

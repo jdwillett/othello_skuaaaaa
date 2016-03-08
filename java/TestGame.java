@@ -32,6 +32,7 @@ public class TestGame {
         
         // Start the game.
         OthelloObserver o = new OthelloDisplay();
+        //OthelloObserver o = NULL;
         OthelloGame g = null;
         if (args.length == 2) {
             // No timeout arg given; use unlimited time.
