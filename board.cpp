@@ -222,7 +222,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
         {20, -3, 11, 8, 8, 11, -3, 20}
     };
     // Piece difference, frontier disks and disk squares
-    for(i=0; i<8; i++)
+    for(i=0; i<8; i++){
         for(j=0; j<8; j++)  {
             if(get(side, i, j))  {
                 d += V[i][j];
@@ -243,6 +243,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
                 }
             }
         }
+    }
     if(my_tiles > opp_tiles)
         p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
     else if(my_tiles < opp_tiles)

@@ -1,7 +1,5 @@
 #include "player.h"
 
-Board * b;
-
 /*
  * Constructor for the player; initialize everything here. The side your AI is
  * on (BLACK or WHITE) is passed in as "side". The constructor must finish 
@@ -47,12 +45,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      b->doMove(opponentsMove, other);
 
      // find all possible moves
-     std::vector<Move> moves = getOptions();
+     std::vector<Move> moves = getOptions(mySide);
 
      if(moves.empty()) return NULL;
 
      // select move that leads to hightest score
-     Move best = getBestMove(moves);
+     Move best = getBestMoveImproved(moves);
      Move * bestp = new Move(best.getX(), best.getY());
 
      b->doMove(bestp, mySide);
@@ -61,9 +59,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 }
 
 
-std::vector<Move> Player::getOptions()
+std::vector<Move> Player::getOptions(Side side)
 {
-    return  b->getAllMoves(mySide);;
+    return b->getAllMoves(side);
 }
 
 
@@ -83,8 +81,76 @@ Move Player::getBestMove(std::vector<Move> moves)
     }
 
     return moves[maxIndex];
-
 }
+
+Move Player::getBestMoveImproved(std::vector<Move> moves)
+{
+    std::vector<Board*> myboards;
+    for(int i = 0; i < (int)moves.size(); i++){
+        Board * newb = b->copy();
+        newb->doMove(&moves[i], mySide);
+        
+        // calculate all the moves the opp can make from this board
+        std::vector<Move> opptMoves = getOptions(other);
+        std::vector<Board*> oppBoards;
+        for(int j = 0; j < (int)opptMoves.size(); j++){
+        	Board * newbopp = newb->copy();
+        	newbopp->doMove(&opptMoves[j], other);
+        	newbopp->score = heuristic(newbopp);
+        	oppBoards.push_back(newbopp);
+        }
+
+        if(oppBoards.size() == 0) newb->score = 10000;
+        else newb->score = oppBoards[getMinIndex(oppBoards)]->score;
+        myboards.push_back(newb);
+    }
+
+    int index = getMaxIndex(myboards);
+    return moves[index];
+}
+
+double Player::getMinIndex(std::vector<Board*> boards)
+{
+	double min = 1.e20;
+	double minIndex = -1;
+
+	for(int i = 0; i < (int)boards.size(); i++){
+        double score = boards[i]->score;
+        if(score < min){
+        	min = score;
+        	minIndex = i;
+        }
+    }
+
+    return minIndex;
+}
+
+
+double Player::getMaxIndex(std::vector<Board*> boards)
+{
+	double max = -1.e20;
+	double maxIndex = 0;
+
+	for(int i = 0; i < (int)boards.size(); i++){
+        double score = boards[i]->score;
+        if(score > max){
+        	max = score;
+        	maxIndex = i;
+        }
+    }
+
+    return maxIndex;
+}
+
+double Player::simpleheurisitic(Board * b)
+{
+	if(mySide == WHITE){
+		return (b->countWhite() - b->countBlack());
+	}else{
+		return (b->countBlack() - b->countWhite());
+	}
+}
+
 
 double Player::heuristic(Board * b)
 {

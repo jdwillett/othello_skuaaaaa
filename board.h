@@ -20,6 +20,7 @@ public:
     Board();
     ~Board();
     Board *copy();
+    double score;
         
     bool isDone();
     bool hasMoves(Side side);
@@ -29,10 +30,13 @@ public:
     int countBlack();
     int countWhite();
     int numValidMoves(Side side);
-    double dynamic_heuristic_evaluation_function(Side side);
 
     void setBoard(char data[]);
     std::vector<Move> getAllMoves(Side s);
+   
+    double dynamic_heuristic_evaluation_function(Side side);
+
+
 };
 
 #endif
