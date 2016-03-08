@@ -51,40 +51,58 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
      // find all possible moves
      std::cerr << "started domove\n";
-     std::vector<Move*> moves = getOptions();
-     std::cerr <<"got all the moves\n";
+     std::vector<Move> moves = getOptions();
+     std::cerr << "got all the moves\n";
+
+     std::cerr << "length of moves\n";
+
+     if(moves.empty()) return NULL;
+
+     for(int i = 0; i < (int)moves.size(); i++){
+     	Move m = moves[i];
+     	Move mov = m;
+     	std::cerr << "(" << mov.getX() << ", " << mov.getY() << ")\n";
+     }
 
      // select move that leads to hightest score
-     Move * best = getBestMove(moves);
+     Move best = getBestMove(moves);
 
-     b->doMove(best, mySide);
+     std::cerr << "best move: " << best.getX() << ", " << best.getY() << "\n";
+
+     Move * bestp = new Move(best.getX(), best.getY());
+
+     b->doMove(bestp, mySide);
 
      std::cerr << "ended domove\n";
 
-    return (best);
+     return bestp;
 }
 
 
-std::vector<Move*> Player::getOptions()
+std::vector<Move> Player::getOptions()
 {
-	return b->getAllMoves(mySide);
+	std::vector<Move> movs = b->getAllMoves(mySide);
+	return movs;
 }
 
 
-Move* Player::getBestMove(std::vector<Move*> moves)
+Move Player::getBestMove(std::vector<Move> moves)
 {
 	double maxh = -1e20;
 	int maxIndex = 0;
 
 	for(int i = 0; i < (int)moves.size(); i++){
 		Board * newb = b->copy();
-		newb->doMove(moves[i], mySide);
+		std::cerr << "processing move " << moves[i].getX() << ", " << moves[i].getY() << "\n";
+		newb->doMove(&moves[i], mySide);
 		double h = heuristic(newb);
 		if(h > maxh){
 			maxh = h;
 			maxIndex = i;
 		}
 	}
+
+	std::cerr << "chose " << moves[maxIndex].getX() << ", " << moves[maxIndex].getY() << "\n";
 
 	return moves[maxIndex];
 
@@ -98,6 +116,7 @@ double Player::heuristic(Board * b)
 		return (double)(b->countBlack() - b->countWhite());
 	}
 
+	cout << "XXXXXXXXXXXXXXXXXXXXXXX\n";
 	return 0.0;
 }
 

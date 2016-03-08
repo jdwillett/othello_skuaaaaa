@@ -30,7 +30,7 @@ public:
     int countWhite();
 
     void setBoard(char data[]);
-    std::vector<Move*> getAllMoves(Side s);
+    std::vector<Move> getAllMoves(Side s);
 };
 
 #endif

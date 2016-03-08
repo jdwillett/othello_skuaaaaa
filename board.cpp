@@ -72,7 +72,6 @@ bool Board::hasMoves(Side side) {
  */
 bool Board::checkMove(Move *m, Side side) {
     // Passing is only legal if you have no moves.
-    std::cerr << "started checkMove()\n";
     if (m == NULL) return !hasMoves(side);
 
     int X = m->getX();
@@ -100,7 +99,6 @@ bool Board::checkMove(Move *m, Side side) {
         }
     }
 
-    std::cerr << "finished checkMove()\n";
     return false;
 }
 
@@ -182,21 +180,16 @@ void Board::setBoard(char data[]) {
     }
 }
 
-std::vector<Move*> Board::getAllMoves(Side side){
-    std::vector<Move*> moves;
-    std::cerr << "entered getAllMoves()\n";
+std::vector<Move> Board::getAllMoves(Side side){
+    std::vector<Move> moves;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             Move move(i, j);
             if (checkMove(&move, side)){
-                std::cerr << "passed checked moves\n";
-                moves.push_back(&move);
+                moves.push_back(move);
             }else{
-                std::cerr << "move is is not valid\n";
             }
         }
     }
-
-
     return moves;
 }
