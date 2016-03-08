@@ -45,7 +45,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
      b->doMove(opponentsMove, other);
 
      // find all possible moves
-     std::vector<Move> moves = getOptions(mySide);
+     std::vector<Move> moves = getOptions(mySide, b);
 
      if(moves.empty()) return NULL;
 
@@ -59,9 +59,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 }
 
 
-std::vector<Move> Player::getOptions(Side side)
+std::vector<Move> Player::getOptions(Side side, Board * brd)
 {
-    return b->getAllMoves(side);
+    return brd->getAllMoves(side);
 }
 
 
@@ -87,20 +87,25 @@ Move Player::getBestMoveImproved(std::vector<Move> moves)
 {
     std::vector<Board*> myboards;
     for(int i = 0; i < (int)moves.size(); i++){
+
         Board * newb = b->copy();
         newb->doMove(&moves[i], mySide);
         
         // calculate all the moves the opp can make from this board
-        std::vector<Move> opptMoves = getOptions(other);
+        std::vector<Move> opptMoves = getOptions(other, newb);
         std::vector<Board*> oppBoards;
         for(int j = 0; j < (int)opptMoves.size(); j++){
         	Board * newbopp = newb->copy();
         	newbopp->doMove(&opptMoves[j], other);
-        	newbopp->score = heuristic(newbopp);
+        	if(testingMinimax){
+        		newbopp->score = simpleheurisitic(newbopp);
+        	}else{
+        		newbopp->score = heuristic(newbopp);
+        	}
         	oppBoards.push_back(newbopp);
         }
 
-        if(oppBoards.size() == 0) newb->score = 10000;
+        if(oppBoards.size() == 0) newb->score = -10000;
         else newb->score = oppBoards[getMinIndex(oppBoards)]->score;
         myboards.push_back(newb);
     }
@@ -129,7 +134,7 @@ double Player::getMinIndex(std::vector<Board*> boards)
 double Player::getMaxIndex(std::vector<Board*> boards)
 {
 	double max = -1.e20;
-	double maxIndex = 0;
+	double maxIndex = -1;
 
 	for(int i = 0; i < (int)boards.size(); i++){
         double score = boards[i]->score;

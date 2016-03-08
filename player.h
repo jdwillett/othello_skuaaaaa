@@ -9,17 +9,17 @@ using namespace std;
 class Player {
 
 private:
-    Board *b;
     Side  mySide;
     Side other;
     
 public:
+    Board *b;
     Player(Side side);
     ~Player();
     
     Move *doMove(Move *opponentsMove, int msLeft);
     double heuristic(Board*board);
-    std::vector<Move> getOptions(Side side);
+    std::vector<Move> getOptions(Side side, Board * brd);
     Move getBestMove(std::vector<Move> moves);
     Move getBestMoveImproved(std::vector<Move> moves);
     double getMinIndex(std::vector<Board*> boards);
