@@ -141,7 +141,7 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 	}
 
 	if(ourpick){
-		// we pick the next move
+		// we pick the next move, maximize from this list
 		std::vector<Move> movs = getOptions(mySide, brd);
 		std::vector<Board*> nextBoards;
 
@@ -158,6 +158,7 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 		else
 			brd->score = nextBoards[getMaxIndex(nextBoards)]->score;
 	}else{
+		// opp picks best move, mimimize from this list
 		std::vector<Move> movs = getOptions(other, brd);
 		std::vector<Board*> nextBoards;
 
