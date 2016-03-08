@@ -51,7 +51,10 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
      // select move that leads to hightest score
      //Move best = getBestMoveImproved(moves);
-     Move best = getBestMoveNPly(moves, 3);
+     int maxlevel;
+     if(testingMinimax) maxlevel = 2;
+     else maxlevel = 3;
+     Move best = getBestMoveNPly(moves, maxlevel);
      Move * bestp = new Move(best.getX(), best.getY());
 
      b->doMove(bestp, mySide);
@@ -145,7 +148,8 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 		for(int i = 0; i < (int)movs.size(); i++){
 			Board * newb = brd->copy();
 			newb->doMove(&movs[i], mySide);
-			getScore(newb, maxlevel, level + 1, !ourpick);
+			ourpick = !ourpick;
+			getScore(newb, maxlevel, level + 1, ourpick);
 			nextBoards.push_back(newb);
 		}
 
@@ -153,21 +157,17 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 			brd->score = heuristic(brd);
 		else
 			brd->score = nextBoards[getMaxIndex(nextBoards)]->score;
-
 	}else{
 		std::vector<Move> movs = getOptions(other, brd);
 		std::vector<Board*> nextBoards;
 
-		std::cerr << "size of moves is " << movs.size() << std::endl;
-
 		for(int i = 0; i < (int)movs.size(); i++){
 			Board * newb = brd->copy();
 			newb->doMove(&movs[i], other);
-			getScore(newb, maxlevel, level + 1, !ourpick);
+			ourpick = !ourpick;
+			getScore(newb, maxlevel, level + 1, ourpick);
 			nextBoards.push_back(newb);
 		}
-
-		std::cerr << "gets here\n";
 
 		if(movs.size() == 0)
 			brd->score = heuristic(brd);
