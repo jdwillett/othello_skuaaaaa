@@ -28,6 +28,7 @@ public:
     int count(Side side);
     int countBlack();
     int countWhite();
+    int numValidMoves(Side side);
 
     void setBoard(char data[]);
     std::vector<Move> getAllMoves(Side s);

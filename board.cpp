@@ -193,3 +193,14 @@ std::vector<Move> Board::getAllMoves(Side side){
     }
     return moves;
 }
+
+int Board::numValidMoves(Side side){
+    int count = 0;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Move move(i, j);
+            if (checkMove(&move, side)) count++;
+        }
+    }
+    return count;
+}
