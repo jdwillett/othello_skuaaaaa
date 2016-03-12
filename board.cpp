@@ -206,6 +206,22 @@ int Board::numValidMoves(Side side){
 }
 
 double Board::dynamic_heuristic_evaluation_function(Side side)  {
+
+    if(side == WHITE){
+        if(countWhite() == 0)
+            return -1.e7;
+        if(countBlack() == 0)
+            return 1.e7;
+    }else{
+        if(countBlack() == 0)
+            return -1.e7; 
+        if(countWhite() == 0)
+            return 1.e7;
+    }
+
+
+
+
     int my_tiles = 0, opp_tiles = 0, i, j, k, my_front_tiles = 0, opp_front_tiles = 0, x, y;
     double p = 0, c = 0, l = 0, m = 0, f = 0, d = 0;
 
@@ -244,6 +260,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
             }
         }
     }
+
     if(my_tiles > opp_tiles)
         p = (100.0 * my_tiles)/(my_tiles + opp_tiles);
     else if(my_tiles < opp_tiles)
@@ -305,8 +322,15 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
     l = -12.5 * (my_tiles - opp_tiles);
 
     // Mobility
+    Side other;
+
+    if(side == WHITE)
+        other =  BLACK;
+    else
+        other = WHITE;
+
     my_tiles = this->numValidMoves(side);
-    opp_tiles = this->numValidMoves(side);
+    opp_tiles = this->numValidMoves(other);
     if(my_tiles > opp_tiles)
         m = (100.0 * my_tiles)/(my_tiles + opp_tiles);
     else if(my_tiles < opp_tiles)

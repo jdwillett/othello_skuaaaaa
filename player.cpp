@@ -136,10 +136,11 @@ Move Player::getBestMoveNPly(std::vector<Move> moves, int maxlevel)
 void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 {
 	if(level == maxlevel){
-		if(!testingMinimax)
+		if(!testingMinimax){
 			brd->score = heuristic(brd);
-		else
+		}else{
 			brd->score = simpleheurisitic(brd);
+		}
 		return;
 	}
 
@@ -162,8 +163,9 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 			else
 				brd->score = simpleheurisitic(brd);
 		}
-		else
+		else{
 			brd->score = nextBoards[getMaxIndex(nextBoards)]->score;
+		}
 	}else{
 		// opp picks best move, mimimize from this list
 		std::vector<Move> movs = getOptions(other, brd);
@@ -184,8 +186,9 @@ void Player::getScore(Board * brd, int maxlevel, int level, bool ourpick)
 			else
 				brd->score = simpleheurisitic(brd);
 		}
-		else
+		else{
 			brd->score = nextBoards[getMinIndex(nextBoards)]->score;
+		}
 	}
 
 }
