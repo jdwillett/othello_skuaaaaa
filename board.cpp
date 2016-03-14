@@ -325,7 +325,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
     Side other;
 
     if(side == WHITE)
-        other =  BLACK;
+        other = BLACK;
     else
         other = WHITE;
 

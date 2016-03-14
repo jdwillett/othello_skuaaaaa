@@ -26,7 +26,7 @@ public:
     double getMaxIndex(std::vector<Board*> boards);
     double simpleheurisitic(Board * b);
     Move getBestMoveNPly(std::vector<Move> moves, int maxlevel);
-    void getScore(Board * brd, int maxlevel, int level, bool ourpick);
+    void getScore(Board * brd, int maxlevel, int level, bool ourpick, double alpha, double beta);
     
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
