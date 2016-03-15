@@ -219,7 +219,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
             return 1.e7;
     }*/
 
-    int whiteCount = countWhite();
+    /*int whiteCount = countWhite();
     int blackCount = countBlack();
 
     if(isDone()){
@@ -234,7 +234,7 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
             else
                 return 1.e7;
         }
-    }
+    }*/
 
     int my_tiles = 0, opp_tiles = 0, i, j, k, my_front_tiles = 0, opp_front_tiles = 0, x, y;
     double p = 0, c = 0, l = 0, m = 0, f = 0, d = 0;
