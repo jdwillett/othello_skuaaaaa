@@ -207,7 +207,7 @@ int Board::numValidMoves(Side side){
 
 double Board::dynamic_heuristic_evaluation_function(Side side)  {
 
-    if(side == WHITE){
+    /*if(side == WHITE){
         if(countWhite() == 0)
             return -1.e7;
         if(countBlack() == 0)
@@ -217,10 +217,24 @@ double Board::dynamic_heuristic_evaluation_function(Side side)  {
             return -1.e7; 
         if(countWhite() == 0)
             return 1.e7;
+    }*/
+
+    int whiteCount = countWhite();
+    int blackCount = countBlack();
+
+    if(isDone()){
+        if(whiteCount > blackCount){
+            if(side == WHITE)
+                return 1.e7;
+            else
+                return -1.e7;
+        }else if(blackCount > whiteCount){
+            if(side == WHITE)
+                return -1.e7;
+            else
+                return 1.e7;
+        }
     }
-
-
-
 
     int my_tiles = 0, opp_tiles = 0, i, j, k, my_front_tiles = 0, opp_front_tiles = 0, x, y;
     double p = 0, c = 0, l = 0, m = 0, f = 0, d = 0;
